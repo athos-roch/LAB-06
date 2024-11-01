@@ -27,9 +27,29 @@ diamonds <- diamonds %>% rename(
 ## Exercise 1
 
 ```{r}
-# Do some preliminary investigations & cleaning
 
+diamonds |> 
+  filter(price < 600) |> 
+  group_by(cut) |> 
+  summarise(
+    avg_carat = mean(carat, na.rm = TRUE),
+    avg_price = mean(price, na.rm = TRUE)
+  )
 
+diamonds |> 
+  filter(length_mm > 0 & width_mm > 0 & depth_mm > 0) |> 
+  group_by(cut) |> 
+  summarise(
+    avg_carat = mean(carat, na.rm = TRUE),
+    avg_volume = mean(length_mm*width_mm*depth_mm)
+  )
+
+diamonds |> 
+  ggplot(aes(x = cut)) +
+  geom_bar()
+
+diamonds |> 
+  filter()
 
 
 ```
@@ -44,12 +64,27 @@ diamonds <- diamonds %>%
 
 # Overall table_mm arithmetic mean?
 
-
-
-
-
+diamonds |> 
+  filter(!is.na(table_mm)) |> 
+  summarise(
+    avg_table_mm = mean(table_mm, na.rm = TRUE)
+  )
 
 # table_mm arithmetic mean within each clarity category
+
+diamonds |> 
+  group_by(clarity) |> 
+  summarise(
+    avg_table_mm = mean(table_mm, na.rm = TRUE)
+  )
+
+diamonds |> 
+  group_by(clarity) |> 
+  summarise(
+    avg_table_mm = mean(table_mm, na.rm = TRUE)
+  ) |> 
+  ggplot(aes(x = avg_table_mm, y = clarity)) +
+  geom_col()
 
 
 
@@ -58,20 +93,23 @@ diamonds <- diamonds %>%
 
 ```
 
-_Add your comment here_
+The better the clarity the lower the average table length and we can see this visualized with the graph above.
 
 ```{r}
-# calculate the arithmetic mean across all numeric variables
 
-
-
-
+diamonds |> 
+  select(
+    carat, depth_pct, table_pct, price, length_mm, width_mm, depth_mm, table_mm
+  ) |> 
+  summarise(
+    across(where(is.numeric), \(x) mean(x))
+  )
 ```
 
 ## Exercise 3
 
 ```{r}
-# Write gmean() command
+
 
 
 
